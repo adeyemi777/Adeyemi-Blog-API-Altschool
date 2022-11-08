@@ -85,16 +85,16 @@ const getUserBlogs_get = async (req, res, next) => {
 
 const getPublishedBlogById_get = async (req, res, next) => {
 	try {
-		const blogId = req.params.id;
+		const myblogid = req.params.id;
 
-		if (!isValidObjectId(blogId)) {
+		if (!isValidObjectId(myblogid)) {
 			return res
 				.status(400)
 				.json({ status: false, error: "Invalid: blog id" });
 		}
 
 		const blog = await Blog.findOne({
-			_id: blogId,
+			_id: myblogid,
 			state: blogStates.published,
 		}).populate("author", "email firstName lastName -_id");
 		if (!blog)
@@ -129,15 +129,15 @@ const createBlog_post = async (req, res, next) => {
 
 const updateBlogToPublish_patch = async (req, res, next) => {
 	try {
-		const blogId = req.params.id;
+		const myblogid = req.params.id;
 
-		if (!isValidObjectId(blogId)) {
+		if (!isValidObjectId(myblogid)) {
 			return res
 				.status(400)
 				.json({ status: false, error: "Invalid blog id" });
 		}
 
-		const blog = await Blog.findById(blogId);
+		const blog = await Blog.findById(myblogid);
 		if (!blog)
 			return res
 				.status(404)
@@ -171,10 +171,10 @@ const updateBlogToPublish_patch = async (req, res, next) => {
 
 const editBlog_put = async (req, res, next) => {
 	try {
-		const blogId = req.params.id;
+		const myblogid = req.params.id;
 		const { title, description, body, tags } = req.body;
 
-		if (!isValidObjectId(blogId)) {
+		if (!isValidObjectId(myblogid)) {
 			return res
 				.status(400)
 				.json({ status: false, error: "Invalid blog id" });
@@ -185,7 +185,7 @@ const editBlog_put = async (req, res, next) => {
 				.status(403)
 				.json({ status: false, error: "Blog title has been taken!" });
 
-		const blog = await Blog.findById(blogId);
+		const blog = await Blog.findById(myblogid);
 		if (!blog)
 			return res
 				.status(404)
@@ -212,15 +212,15 @@ const editBlog_put = async (req, res, next) => {
 
 const deleteBlog_delete = async (req, res, next) => {
 	try {
-		const blogId = req.params.id;
+		const myblogid = req.params.id;
 
-		if (!isValidObjectId(blogId)) {
+		if (!isValidObjectId(myblogid)) {
 			return res
 				.status(400)
 				.json({ status: false, error: "Invalid blog id" });
 		}
 
-		const blog = await Blog.findById(blogId);
+		const blog = await Blog.findById(myblogid);
 		if (!blog)
 			return res
 				.status(404)
@@ -234,7 +234,7 @@ const deleteBlog_delete = async (req, res, next) => {
 				});
 		}
 
-		await Blog.findByIdAndDelete(blogId);
+		await Blog.findByIdAndDelete(myblogid);
 		res.status(200).json({
 			status: true,
 			message: "Blog deleted successfully",

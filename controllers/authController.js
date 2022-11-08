@@ -1,9 +1,25 @@
 const jwt = require("jsonwebtoken");
+const userModel= require("../models/user") 
 require("dotenv").config();
 
-const signup_post = (req, res, next) => {
+const signup_post = async (req, res, next) => {
 	try {
-		res.status(201).json({ message: "Signup Complete", user: req.user });
+		const user = await userModel.create(req.body);
+    user.password = undefined;
+    const payload = { user };
+  console.log(payload);
+  const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRY_TIME,
+  });
+    return res.status(201).json({
+      status: "success",
+      token,
+      data: {
+        user,
+      },
+    });
+
+	
 	} catch (error) {
 		console.log(error);
 		next(error);
