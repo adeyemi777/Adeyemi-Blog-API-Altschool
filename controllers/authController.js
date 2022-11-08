@@ -4,22 +4,7 @@ require("dotenv").config();
 
 const signup_post = async (req, res, next) => {
 	try {
-		const user = await userModel.create(req.body);
-    user.password = undefined;
-    const payload = { user };
-  console.log(payload);
-  const token = jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRY_TIME,
-  });
-    return res.status(201).json({
-      status: "success",
-      token,
-      data: {
-        user,
-      },
-    });
-
-	
+		res.status(201).json({ message: "Signup Complete", user: req.user });
 	} catch (error) {
 		console.log(error);
 		next(error);
